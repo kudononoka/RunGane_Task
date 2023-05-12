@@ -9,6 +9,7 @@ public class Move : MonoBehaviour
     [SerializeField, Header("‰¡ˆÚ“®‚Ì‘¬“x")] float _moveXSpeed;
     bool isStop = false;
     float time;
+    int count = 0;
     Vector3 playerPos;
     void Awake()
     {
@@ -16,7 +17,7 @@ public class Move : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         //’âŽ~
         if (isStop)
@@ -25,15 +26,20 @@ public class Move : MonoBehaviour
         }
         else
         {
-            float x = Input.GetAxisRaw("Horizontal");
-            if(transform.position.x < -9 && x == -1 || transform.position.x > 9 && x == 1)
+            float x = 0;
+            if(Input.GetKeyDown(KeyCode.LeftArrow) && count > -1)
             {
-                _rigidBody.velocity = Vector3.forward * _moveSpeed;
+                x = -1;
+                count--;
             }
-            else
+            else if(Input.GetKeyDown(KeyCode.RightArrow) && count < 1)
             {
-                _rigidBody.velocity = Vector3.right * x * _moveXSpeed + Vector3.forward * _moveSpeed;
+                x = 1;
+                count++;
             }
+            _rigidBody.velocity = Vector3.forward * _moveSpeed;
+            _rigidBody.AddForce(Vector3.right * x * _moveXSpeed, ForceMode.Impulse);
+            
         }
     }
 

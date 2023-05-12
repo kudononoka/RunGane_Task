@@ -8,6 +8,7 @@ public class CubeGeneration : MonoBehaviour
     [SerializeField, Header("CubePrefab")] GameObject _cubePrefab;
     [SerializeField, Header("Cube’u‚­ŠÔŠu")] float _distance;
     [SerializeField, Header("¶¬‚·‚éêŠ‚Ì”ÍˆÍ")] Transform[] _startEnd;
+    [SerializeField, Header("¶¬‚·‚éêŠX")] float[] _generatePosX;
     void Start()
     {
         Vector3 generationPos = _startEnd[0].position;
@@ -16,6 +17,8 @@ public class CubeGeneration : MonoBehaviour
         {
             Instantiate(_cubePrefab, generationPos, Quaternion.identity);
             generationPos.z += _distance;
+            int index = Random.Range(0, _generatePosX.Length);
+            generationPos.x = _generatePosX[index];
         }
     }
 
