@@ -5,17 +5,18 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     Rigidbody _rigidBody;
-    [SerializeField, Header("スピード")] float _moveSpeed;
+    [SerializeField, Header("前方向の速度")] float _moveSpeed;
+    [SerializeField, Header("横移動の速度")] float _moveXSpeed;
     bool isStop = false;
     float time;
-
+    Vector3 playerPos;
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //停止
         if (isStop)
@@ -24,10 +25,16 @@ public class Move : MonoBehaviour
         }
         else
         {
-            //移動
-            _rigidBody.velocity = new Vector3(0, 0, _moveSpeed);
+            float x = Input.GetAxisRaw("Horizontal");
+            if(transform.position.x < -9 && x == -1 || transform.position.x > 9 && x == 1)
+            {
+                _rigidBody.velocity = Vector3.forward * _moveSpeed;
+            }
+            else
+            {
+                _rigidBody.velocity = Vector3.right * x * _moveXSpeed + Vector3.forward * _moveSpeed;
+            }
         }
-
     }
 
     private void OnTriggerEnter(Collider other)
