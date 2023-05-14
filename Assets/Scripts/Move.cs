@@ -10,14 +10,30 @@ public class Move : MonoBehaviour
     bool isStop = false;
     float time;
     int count = 0;
+    float _moveXDir = 0;
     Vector3 playerPos;
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
+    {
+        _moveXDir = 0;
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && count > -1)
+        {
+            _moveXDir = -1;
+            count--;
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) && count < 1)
+        {
+            _moveXDir = 1;
+            count++;
+        }
+        _rigidBody.AddForce(Vector3.right * _moveXDir * _moveXSpeed, ForceMode.Impulse);
+    }
+    
+    void FixedUpdate()
     {
         //’âŽ~
         if (isStop)
@@ -26,20 +42,7 @@ public class Move : MonoBehaviour
         }
         else
         {
-            float x = 0;
-            if(Input.GetKeyDown(KeyCode.LeftArrow) && count > -1)
-            {
-                x = -1;
-                count--;
-            }
-            else if(Input.GetKeyDown(KeyCode.RightArrow) && count < 1)
-            {
-                x = 1;
-                count++;
-            }
             _rigidBody.velocity = Vector3.forward * _moveSpeed;
-            _rigidBody.AddForce(Vector3.right * x * _moveXSpeed, ForceMode.Impulse);
-            
         }
     }
 
